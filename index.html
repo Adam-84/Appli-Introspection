@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Application d'introspection</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>Cartes d'introspection</h1>
+      <p class="subtitle">Clique sur une carte pour reveler une question de reflection.</p>
+    </header>
+
+    <section class="panel">
+      <div class="panel-top">
+        <p id="remainingText">Questions restantes : 100</p>
+        <button id="resetBtn" type="button">Reinitialiser le paquet</button>
+      </div>
+      <p class="subtitle">Chaque carte pioche une question differente jusqu'a epuisement de la banque.</p>
+      <div id="deck" class="deck" aria-label="Paquet de cartes d'introspection"></div>
+    </section>
+  </main>
+
+  <div id="questionModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <p id="modalQuestion"></p>
+      <p class="modal-hint">Clique n'importe ou pour fermer</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
