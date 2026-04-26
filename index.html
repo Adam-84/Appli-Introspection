@@ -3,33 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Application d'introspection</title>
+  <title>Cartes d'introspection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
+  <script>
+    (function () {
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
 </head>
 <body>
   <main class="container">
-    <header>
+    <header class="app-header">
       <h1>Cartes d'introspection</h1>
-      <p class="subtitle">Clique sur une carte pour reveler une question de reflection.</p>
+      <p class="subtitle">Pioche une carte pour révéler une question de réflexion.</p>
     </header>
-
-    <section class="panel">
-      <div class="panel-top">
-        <p id="remainingText">Questions restantes : 100</p>
-        <button id="resetBtn" type="button">Reinitialiser le paquet</button>
-      </div>
-      <p class="subtitle">Chaque carte pioche une question differente jusqu'a epuisement de la banque.</p>
-      <div id="deck" class="deck" aria-label="Paquet de cartes d'introspection"></div>
+    <nav class="tab-bar" role="tablist" aria-label="Catégories de questions">
+      <button class="tab-btn" data-tab="general" role="tab" aria-selected="false">Général</button>
+      <button class="tab-btn" data-tab="amour"   role="tab" aria-selected="false">Amour &amp; Couple</button>
+      <button class="tab-btn" data-tab="bienetre" role="tab" aria-selected="false">Bien-être mental</button>
+    </nav>
+    <section class="deck-section">
+      <div id="deckStack" class="deck-stack"></div>
+      <p id="progressText" class="progress-text">0 / 5</p>
+      <button id="resetBtn" class="reset-btn" type="button">Réinitialiser le paquet</button>
     </section>
   </main>
-
-  <div id="questionModal" class="modal hidden" aria-hidden="true">
-    <div class="modal-content">
-      <p id="modalQuestion"></p>
-      <p class="modal-hint">Clique n'importe ou pour fermer</p>
-    </div>
-  </div>
-
+  <button id="themeToggle" class="theme-toggle" aria-label="Basculer le thème">🌙</button>
+  <script src="questions.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

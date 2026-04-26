@@ -1,114 +1,25 @@
-const deck = document.getElementById("deck");
-const remainingText = document.getElementById("remainingText");
-const resetBtn = document.getElementById("resetBtn");
-const questionModal = document.getElementById("questionModal");
-const modalQuestion = document.getElementById("modalQuestion");
-const CARDS_ON_TABLE = 16;
+// ── Constants ───────────────────────────────────────────────────────────────
+// Must match the flying card CSS dimensions.
+const CARD_W = 320;
+const CARD_H = 460;
 
-const questionBank = [
-  "Qu'est-ce qui m'a vraiment fait sourire cette semaine ?",
-  "A quel moment me suis-je senti pleinement vivant aujourd'hui ?",
-  "Quelle emotion revient le plus souvent en ce moment ?",
-  "Qu'est-ce que j'evite de regarder en face ?",
-  "Quel besoin personnel n'est pas assez ecoute actuellement ?",
-  "Quand ai-je dit oui alors que je voulais dire non ?",
-  "Quelle situation me prend trop d'energie mentale ?",
-  "Quel petit succes ai-je tendance a minimiser ?",
-  "De quoi suis-je fier, meme en silence ?",
-  "Quelle relation me nourrit sincerement ?",
-  "Quelle relation merite une limite plus claire ?",
-  "Quel pardon ai-je besoin de me donner ?",
-  "Qu'est-ce que mon corps essaie de me dire ces jours-ci ?",
-  "Quelle habitude me fait du bien sur la duree ?",
-  "Quelle habitude m'eloigne de ce qui compte pour moi ?",
-  "Qu'est-ce qui m'apaise rapidement quand je suis tendu ?",
-  "Quel est mon plus grand declencheur de stress en ce moment ?",
-  "Quelle pensee repetitive pourrais-je remettre en question ?",
-  "Si je ralentissais aujourd'hui, qu'est-ce qui changerait ?",
-  "Quelle decision reportee me pese encore ?",
-  "Qu'est-ce que je controle trop et qui m'epuise ?",
-  "Qu'est-ce que je ne controle pas et que je pourrais accepter ?",
-  "Quel objectif est vraiment le mien, et pas celui des autres ?",
-  "Qu'est-ce qui me motive profondement en ce moment ?",
-  "A quoi ressemble une bonne journee pour moi ?",
-  "Quelle peur guide certaines de mes decisions recentes ?",
-  "Quand me suis-je senti aligne avec mes valeurs ?",
-  "Quelle valeur personnelle ai-je negligee cette semaine ?",
-  "Quel choix simple pourrait alleger ma charge mentale ?",
-  "Qu'est-ce que je souhaite apprendre sur moi cette annee ?",
-  "De quoi ai-je besoin pour me sentir en securite interieure ?",
-  "Quel message interieur critique revient souvent ?",
-  "Comment parlerais-je a un ami dans ma situation ?",
-  "Quelle est ma definition actuelle de la reussite ?",
-  "Qu'est-ce que je poursuis par habitude plutot que par desir ?",
-  "Quel souvenir me rappelle ma force personnelle ?",
-  "Quelle qualite personnelle m'aide le plus dans les moments difficiles ?",
-  "Qu'est-ce que je peux simplifier des aujourd'hui ?",
-  "Quelle conversation importante ai-je besoin d'avoir ?",
-  "Que puis-je faire cette semaine pour me respecter davantage ?",
-  "Quel engagement envers moi-meme est non negociable ?",
-  "Qu'est-ce qui me fatigue plus que je ne l'admets ?",
-  "A quel endroit ai-je besoin de plus de douceur ?",
-  "Qu'est-ce qui me donne de l'elan le matin ?",
-  "Quelle est la plus petite action utile que je peux faire maintenant ?",
-  "De quoi ai-je peur si je reussis vraiment ?",
-  "De quoi ai-je peur si j'echoue ?",
-  "Quelle croyance limite mon potentiel actuel ?",
-  "Quel risque sain ai-je envie de prendre ?",
-  "A quoi ai-je dit oui trop vite cette semaine ?",
-  "Qu'est-ce que je veux proteger dans ma vie aujourd'hui ?",
-  "Qu'est-ce que je veux laisser derriere moi ?",
-  "Quel mot decrit le mieux mon etat interieur actuel ?",
-  "Quelle est ma priorite emotionnelle du moment ?",
-  "Quand ai-je ignore mon intuition recemment ?",
-  "Quand mon intuition m'a-t-elle bien guide ?",
-  "Qu'est-ce que j'envie chez les autres et pourquoi ?",
-  "Que m'apprend cette envie sur mes propres desirs ?",
-  "Qu'est-ce que je tolererais moins si je m'aimais davantage ?",
-  "Quelle limite claire puis-je poser cette semaine ?",
-  "Qu'est-ce que je remets toujours a plus tard ?",
-  "Quel premier pas concret me semble realiste ?",
-  "Qu'est-ce qui m'aide a retrouver mon calme rapidement ?",
-  "Que puis-je celebrer aujourd'hui, meme modestement ?",
-  "Quelle part de moi a besoin d'etre entendue ?",
-  "A quel moment me suis-je trahi pour plaire ?",
-  "Qu'est-ce qui me manque le plus en ce moment ?",
-  "Comment puis-je me l'offrir partiellement des maintenant ?",
-  "Quel choix serait le plus coherent avec mes valeurs ?",
-  "Qu'est-ce qui me donne le sentiment d'avancer ?",
-  "Quand ai-je ressenti de la gratitude recemment ?",
-  "Qu'est-ce que je veux nourrir davantage dans ma vie ?",
-  "Quelle charge emotionnelle puis-je deposer aujourd'hui ?",
-  "Quelle action me rapprocherait de ma paix interieure ?",
-  "Quel domaine de ma vie appelle plus d'attention ?",
-  "Qu'est-ce que je cache derriere le mot 'ca va' ?",
-  "A qui pourrais-je demander de l'aide sans honte ?",
-  "Qu'est-ce que je peux arreter de perfectionner ?",
-  "Quel progres compte plus que la perfection ?",
-  "Qu'est-ce qui me fait perdre mon centre ?",
-  "Qu'est-ce qui me ramene a moi ?",
-  "Quelle part de ma routine n'a plus de sens ?",
-  "Qu'est-ce que je veux ressentir plus souvent ?",
-  "Que puis-je faire pour favoriser ce ressenti ?",
-  "Quels signes montrent que je suis sur la bonne voie ?",
-  "Qu'est-ce que je veux vivre davantage dans mes relations ?",
-  "Quelle attente irreelle me met sous pression ?",
-  "Comment puis-je etre plus juste avec moi-meme ?",
-  "Qu'est-ce que je peux accepter de ne pas savoir ?",
-  "Quelle decision me ferait respirer plus librement ?",
-  "Qu'est-ce qui me fait me sentir utile ?",
-  "Comment puis-je proteger mon temps personnel ?",
-  "Quel serait mon acte de courage de cette semaine ?",
-  "Quelle intention veux-je poser pour les prochains jours ?",
-  "De quoi ai-je besoin pour me sentir plus ancre ?",
-  "Qu'est-ce qui me reconnecte a l'essentiel ?",
-  "Quelle promesse ai-je envie de me faire aujourd'hui ?",
-  "Quel petit rituel pourrait soutenir mon equilibre ?",
-  "Quel message bienveillant ai-je besoin d'entendre maintenant ?",
-  "Comment saurais-je que je prends mieux soin de moi ?"
-];
-
+// ── State ───────────────────────────────────────────────────────────────────
 let remainingQuestions = [];
+let totalQuestions     = 0;
+let isAnimating        = false;
+let isOpen             = false;
+let flyingCard         = null;
+let overlayEl          = null;
+let ongletActif        = localStorage.getItem("onglet-actif") || "general";
+
+// ── DOM references ──────────────────────────────────────────────────────────
+const deckStack  = document.getElementById("deckStack");
+const progressEl = document.getElementById("progressText");
+const resetBtn   = document.getElementById("resetBtn");
+
+// Questions loaded from questions.js as QUESTIONS global.
+
+// ── Utilities ───────────────────────────────────────────────────────────────
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i -= 1) {
@@ -117,65 +28,273 @@ function shuffle(array) {
   }
 }
 
-function updateRemainingText() {
-  remainingText.textContent = `Questions restantes : ${remainingQuestions.length}`;
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+// Actual rendered card size, accounting for CSS max-width / max-height clamps.
+function effectiveCardSize() {
+  return {
+    w: Math.min(CARD_W, window.innerWidth - 32),
+    h: Math.min(CARD_H, window.innerHeight - 80),
+  };
+}
+
+// Flying card position: top/left anchored at viewport center, offset by tx/ty, scaled by s.
+// At tx=0, ty=0, s=1 the card is exactly centered.
+function applyFlyTransform(el, tx, ty, s) {
+  el.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(${s})`;
+}
+
+// ── Draw (unchanged logic) ──────────────────────────────────────────────────
 
 function drawQuestion() {
-  if (remainingQuestions.length === 0) {
-    return "Le paquet est vide. Clique sur \"Reinitialiser le paquet\".";
-  }
-
-  const question = remainingQuestions.pop();
-  updateRemainingText();
-  return question;
+  if (remainingQuestions.length === 0) return null;
+  return remainingQuestions.pop();
 }
 
-function showModal(question) {
-  modalQuestion.textContent = question;
-  questionModal.classList.remove("hidden");
-  questionModal.setAttribute("aria-hidden", "false");
+function updateProgress() {
+  const drawn = totalQuestions - remainingQuestions.length;
+  progressEl.textContent = `${drawn}\u202f/\u202f${totalQuestions}`;
 }
 
-function closeModal() {
-  questionModal.classList.add("hidden");
-  questionModal.setAttribute("aria-hidden", "true");
+// ── Overlay ─────────────────────────────────────────────────────────────────
+
+function createOverlay() {
+  const el = document.createElement("div");
+  el.className = "overlay";
+  el.addEventListener("click", () => {
+    if (!isAnimating && isOpen) closeCard();
+  });
+  document.body.appendChild(el);
+  return el;
 }
 
-function revealCard(event) {
-  const clickedCard = event.currentTarget;
-  if (clickedCard.disabled) {
-    return;
-  }
+function showOverlay() {
+  overlayEl.style.display = "block";
+  overlayEl.style.opacity = "0";
+  overlayEl.style.transition = "none";
+  // Force reflow so the opacity:0 is painted before we transition.
+  void overlayEl.offsetWidth;
+  overlayEl.style.transition = "opacity 200ms ease";
+  overlayEl.style.opacity = "1";
+}
 
+function hideOverlay() {
+  overlayEl.style.transition = "opacity 200ms ease";
+  overlayEl.style.opacity = "0";
+  // Remove from layout after fade.
+  setTimeout(() => { overlayEl.style.display = "none"; }, 210);
+}
+
+// ── Build flying card element ───────────────────────────────────────────────
+
+function buildFlyingCard(question, drawnIndex) {
+  const el = document.createElement("div");
+  el.className = "flying-card";
+  el.innerHTML = `
+    <div class="card-scene">
+      <div class="card-inner">
+        <div class="card-back">
+          <span class="back-logo">I</span>
+        </div>
+        <div class="card-front">
+          <div class="card-front-header">
+            <button class="card-close-btn" aria-label="Fermer la carte">&times;</button>
+            <span class="card-badge">${drawnIndex}\u202f/\u202f${totalQuestions}</span>
+          </div>
+          <p class="card-question">${question}</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  el.querySelector(".card-close-btn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (!isAnimating && isOpen) closeCard();
+  });
+
+  return el;
+}
+
+// ── Open animation ──────────────────────────────────────────────────────────
+
+async function openCard() {
+  if (isAnimating || isOpen || remainingQuestions.length === 0) return;
+  isAnimating = true;
+
+  // Draw question before animation so progress is accurate on the badge.
   const question = drawQuestion();
-  showModal(question);
-  clickedCard.disabled = true;
-  clickedCard.classList.add("used");
-  clickedCard.innerHTML = "<span class=\"front-label\">Carte piochee</span><span class=\"hint\">Reinitialise pour rejouer</span>";
+  if (!question) { isAnimating = false; return; }
+  updateProgress();
+
+  const topCard = deckStack.querySelector(".stack-card--top");
+  const rect    = topCard.getBoundingClientRect();
+
+  // Scale that makes the flying card appear exactly as big as the deck card.
+  const { w: fw } = effectiveCardSize();
+  const s0  = rect.width / fw;
+  const tx0 = (rect.left + rect.width / 2) - window.innerWidth / 2;
+  const ty0 = (rect.top  + rect.height / 2) - window.innerHeight / 2;
+
+  // Build and inject flying card at deck-card position (no transition yet).
+  const drawn = totalQuestions - remainingQuestions.length;
+  flyingCard = buildFlyingCard(question, drawn);
+  flyingCard.style.transition = "none";
+  applyFlyTransform(flyingCard, tx0, ty0, s0);
+  document.body.appendChild(flyingCard);
+
+  // Hide original top card so the flying card replaces it visually.
+  topCard.style.opacity = "0";
+  topCard.style.pointerEvents = "none";
+
+  // Fade in overlay.
+  showOverlay();
+
+  // Commit initial styles before animating.
+  void flyingCard.offsetWidth;
+
+  // ── Phase 1: Lift (150ms) ──────────────────────────────────────────────
+  flyingCard.style.transition = "transform 150ms ease-out";
+  applyFlyTransform(flyingCard, tx0, ty0 - 10, s0 * 1.05);
+  await wait(160);
+
+  // ── Phase 2: Fly to center + grow (350ms) ─────────────────────────────
+  flyingCard.style.transition = "transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1)";
+  applyFlyTransform(flyingCard, 0, 0, 1);
+  await wait(360);
+
+  // ── Phase 3: Flip back→front (400ms) ──────────────────────────────────
+  const inner = flyingCard.querySelector(".card-inner");
+  inner.style.transition = "transform 400ms ease";
+  inner.classList.add("flipped");
+  flyingCard.style.cursor = "default";
+  await wait(410);
+
+  isAnimating = false;
+  isOpen = true;
 }
 
-function renderDeck() {
-  deck.innerHTML = "";
+// ── Close (instantaneous) ───────────────────────────────────────────────────
 
-  for (let i = 0; i < CARDS_ON_TABLE; i += 1) {
-    const cardButton = document.createElement("button");
-    cardButton.type = "button";
-    cardButton.className = "draw-card";
-    cardButton.innerHTML = "<span class=\"front-label\">Carte a piocher</span><span class=\"hint\">Clique pour retourner</span>";
-    cardButton.addEventListener("click", revealCard);
-    deck.appendChild(cardButton);
+function closeCard() {
+  if (!isOpen || !flyingCard || isAnimating) return;
+  isOpen = false;
+
+  const topCard = deckStack.querySelector(".stack-card--top");
+
+  overlayEl.style.transition = "none";
+  overlayEl.style.opacity    = "0";
+  overlayEl.style.display    = "none";
+  flyingCard.remove();
+  flyingCard = null;
+
+  if (remainingQuestions.length === 0) {
+    deckStack.classList.add("empty");
+    topCard.innerHTML = '<span class="empty-label">Paquet vide</span>';
+    topCard.removeAttribute("tabindex");
+    topCard.removeAttribute("role");
+    topCard.removeAttribute("aria-label");
+    topCard.style.opacity      = "1";
+    topCard.style.pointerEvents = "";
+  } else {
+    topCard.style.opacity      = "1";
+    topCard.style.pointerEvents = "";
   }
 }
+
+// ── Render stack ────────────────────────────────────────────────────────────
+
+function renderStack() {
+  deckStack.classList.remove("empty");
+  deckStack.innerHTML = `
+    <div class="stack-card stack-card--back2" aria-hidden="true"></div>
+    <div class="stack-card stack-card--back1" aria-hidden="true"></div>
+    <div class="stack-card stack-card--top"
+         role="button"
+         tabindex="0"
+         aria-label="Piocher une carte">
+      <span class="back-logo" aria-hidden="true">I</span>
+    </div>
+  `;
+
+  const topCard = deckStack.querySelector(".stack-card--top");
+
+  topCard.addEventListener("click", () => {
+    if (!isAnimating && !isOpen) openCard();
+  });
+
+  topCard.addEventListener("keydown", (e) => {
+    if ((e.key === "Enter" || e.key === " ") && !isAnimating && !isOpen) {
+      e.preventDefault();
+      openCard();
+    }
+  });
+}
+
+// ── Reset (unchanged logic) ─────────────────────────────────────────────────
 
 function resetSession() {
-  remainingQuestions = [...questionBank];
+  // Abort any in-progress animation cleanly.
+  if (flyingCard) {
+    flyingCard.remove();
+    flyingCard = null;
+  }
+  overlayEl.style.display = "none";
+  overlayEl.style.opacity = "0";
+  isAnimating = false;
+  isOpen = false;
+
+  remainingQuestions = [...QUESTIONS[ongletActif]];
   shuffle(remainingQuestions);
-  renderDeck();
-  updateRemainingText();
-  closeModal();
+  totalQuestions = remainingQuestions.length;
+  renderStack();
+  updateProgress();
 }
 
-questionModal.addEventListener("click", closeModal);
+// ── Global keyboard handler ─────────────────────────────────────────────────
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && isOpen && !isAnimating) closeCard();
+});
+
 resetBtn.addEventListener("click", resetSession);
+
+// ── Init ────────────────────────────────────────────────────────────────────
+overlayEl = createOverlay();
 resetSession();
+
+// ── Tabs ─────────────────────────────────────────────────────────────────────
+
+function applyActiveTab() {
+  document.querySelectorAll(".tab-btn").forEach((btn) => {
+    const active = btn.dataset.tab === ongletActif;
+    btn.classList.toggle("tab-btn--active", active);
+    btn.setAttribute("aria-selected", active);
+  });
+}
+
+document.querySelectorAll(".tab-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    if (btn.dataset.tab === ongletActif) return;
+    ongletActif = btn.dataset.tab;
+    localStorage.setItem("onglet-actif", ongletActif);
+    applyActiveTab();
+    resetSession();
+  });
+});
+
+applyActiveTab();
+
+// ── Theme toggle ─────────────────────────────────────────────────────────────
+const themeToggle = document.getElementById("themeToggle");
+
+if (document.documentElement.classList.contains("dark")) {
+  themeToggle.textContent = "☀️";
+}
+
+themeToggle.addEventListener("click", () => {
+  const isDark = document.documentElement.classList.toggle("dark");
+  themeToggle.textContent = isDark ? "☀️" : "🌙";
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+});
